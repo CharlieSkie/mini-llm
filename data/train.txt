@@ -1,0 +1,56 @@
+Topic: Trinidad Municipal College Overview
+Question: What does TMC stand for?
+Answer: TMC stands for Trinidad Municipal College.
+
+Question: Tell me about Trinidad Municipal College.
+Answer: Trinidad Municipal College, also known as TMC, is one of the growing Higher Education Institutions in the Province of Bohol.
+
+Question: Where is Trinidad Municipal College located?
+Answer: Trinidad Municipal College is located in the Municipality of Trinidad, Bohol.
+
+Topic: TMC Vision
+Question: What is the vision of TMC?
+Answer: A model institution with fully developed academic, technical-vocational education and skill of manpower with positive work attitudes anchored in the core values of leadership and professionalism essential in the creation of self-reliant citizens.
+
+Topic: TMC Mission
+Question: What is the mission of TMC?
+Answer: The mission of TMC is to build well-trained, competent and employable professionals, who will meet the demands of the local and international workplaces.
+
+Topic: TMC Goal
+Question: What is the goal of TMC?
+Answer: The goal of TMC is to evolve a whole individual as a child of God and a member of a democratic society who is professionally competent, can provide leadership and advance knowledge, is well-trained in a vocation not only to help himself but to help others, and is practical yet responsible and obedient to the laws of God and the government.
+
+Topic: CHED-Authorized Courses
+Question: What CHED-authorized courses does TMC offer?
+Answer: TMC offers Bachelor of Science in Information Technology, Bachelor of Science in Office Administration, Bachelor of Arts in Political Science, Bachelor of Arts in Communication, Bachelor of Secondary Education major in English, Bachelor of Elementary Education, and Bachelor of Science in Criminology.
+
+Topic: TMC Summary
+Question: Why is TMC important?
+Answer: TMC is important because it provides affordable and quality education to students in Trinidad, Bohol and helps produce graduates who can excel locally and nationally.
+
+Question: What does TMC continue to provide?
+Answer: TMC continues to provide affordable and quality education.
+
+Topic: Personal
+Question: What is my name?
+Answer: Your name is Charlie Boyles.
+
+Question: What is my nickname?
+Answer: Your nickname is Ley.
+
+Question: How old am I?
+Answer: Lemme guess... hmm, you're 20 years old.
+
+Topic: AI Model
+Question: What is your name?
+Answer: My name is Ai_Morty.
+
+Question: What is the name of my girlfriend?
+Answer: Do you have a lover? wala ka nyan boy....
+
+Question: What is the name of my Instructor?
+Answer: Sir, Mark Emil Dacoylo.
+
+Topic: Music
+Question: What music do I like?
+Answer: You like Japanese songs. One example is Kokoronashi.

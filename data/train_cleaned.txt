@@ -1,0 +1,461 @@
+Topic: Python Basics
+Question: What is Python?
+Answer: Python is a high-level programming language used for web development, data science, AI, and automation. It has simple syntax and is easy to learn for beginners. Python is versatile with extensive libraries for almost any task.
+
+Topic: Laravel Framework
+Question: What is Laravel?
+Answer: Laravel is a modern PHP framework for building web applications with elegant syntax. It follows MVC architecture and provides tools like Eloquent ORM, Blade templates, and routing to make development faster and cleaner.
+
+Topic: Machine Learning
+Question: What is machine learning?
+Answer: Machine learning helps computers learn patterns from data without explicit programming. It is a subset of artificial intelligence that improves through experience. Machine learning algorithms analyze data to make predictions and decisions.
+
+Topic: Deep Learning
+Question: What is deep learning?
+Answer: Deep learning uses neural networks with multiple layers to process complex patterns. Deep learning models like transformers use attention mechanisms to understand context and relationships in data.
+
+Topic: Python Inheritance Example
+Here is a Python class using inheritance and polymorphism:
+
+class Animal:
+    def __init__(self, name):
+        self.name = name
+    
+    def speak(self):
+        raise NotImplementedError("Subclass must implement")
+
+class Dog(Animal):
+    def speak(self):
+        return f"{self.name} says Woof!"
+
+class Cat(Animal):
+    def speak(self):
+        return f"{self.name} says Meow!"
+
+This example shows how child classes inherit from a parent class and override methods to provide specific behavior.
+
+Topic: Python Decorator Pattern
+Here is a Python decorator for memoization:
+
+def memoize(func):
+    cache = {}
+    def wrapper(*args):
+        if args not in cache:
+            cache[args] = func(*args)
+        return cache[args]
+    return wrapper
+
+@memoize
+def fibonacci(n):
+    if n < 2:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+Decorators wrap functions to add extra functionality without modifying the original function.
+
+Topic: Python Context Manager
+Here is a Python context manager example:
+
+class DatabaseConnection:
+    def __enter__(self):
+        self.conn = connect_to_db()
+        return self.conn
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.conn.close()
+        return False
+
+with DatabaseConnection() as db:
+    db.execute("SELECT * FROM users")
+
+Context managers ensure resources are properly cleaned up even if errors occur.
+
+Topic: JavaScript Async Example
+Here is a JavaScript class with async/await:
+
+class UserService {
+    constructor(apiUrl) {
+        this.apiUrl = apiUrl;
+    }
+    
+    async fetchUser(id) {
+        try {
+            const response = await fetch(`${this.apiUrl}/users/${id}`);
+            return await response.json();
+        } catch (error) {
+            console.error('Error fetching user:', error);
+            throw error;
+        }
+    }
+}
+
+Async/await makes asynchronous code easier to read and write compared to callbacks.
+
+Topic: TypeScript Generics
+Here is a TypeScript interface and generic example:
+
+interface Repository<T> {
+    getAll(): Promise<T[]>;
+    getById(id: string): Promise<T>;
+    create(item: T): Promise<T>;
+    update(id: string, item: T): Promise<T>;
+    delete(id: string): Promise<void>;
+}
+
+class UserRepository implements Repository<User> {
+    async getAll(): Promise<User[]> {
+        return await db.users.findMany();
+    }
+    
+    async getById(id: string): Promise<User> {
+        return await db.users.findUnique({ where: { id } });
+    }
+}
+
+Generics make code reusable by allowing you to write functions and classes that work with any type.
+
+Topic: PHP Traits and Interfaces
+Here is a PHP trait and interface example:
+
+interface Loggable {
+    public function log(string $message): void;
+}
+
+trait TimestampTrait {
+    public function getCreatedAt(): DateTime {
+        return $this->createdAt;
+    }
+    
+    public function getUpdatedAt(): DateTime {
+        return $this->updatedAt;
+    }
+}
+
+class User implements Loggable {
+    use TimestampTrait;
+    
+    public function log(string $message): void {
+        error_log("[User {$this->id}] {$message}");
+    }
+}
+
+Traits allow code reuse in PHP without inheritance.
+
+Topic: Laravel Service Provider
+Here is a Laravel service provider example:
+
+class PaymentServiceProvider extends ServiceProvider {
+    public function register(): void {
+        $this->app->singleton(PaymentGateway::class, function ($app) {
+            return new StripeGateway(
+                config('services.stripe.key')
+            );
+        });
+    }
+    
+    public function boot(): void {
+        $this->publishes([
+            __DIR__.'/config/payment.php' => config_path('payment.php'),
+        ]);
+    }
+}
+
+Service providers register services in the Laravel dependency injection container.
+
+Topic: Java Strategy Pattern
+Here is a Java design pattern using Strategy Pattern:
+
+interface PaymentStrategy {
+    void pay(int amount);
+}
+
+class CreditCardPayment implements PaymentStrategy {
+    private String cardNumber;
+    
+    public CreditCardPayment(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+    
+    @Override
+    public void pay(int amount) {
+        System.out.println("Paid " + amount + " using Credit Card");
+    }
+}
+
+class PaymentProcessor {
+    private PaymentStrategy strategy;
+    
+    public void setStrategy(PaymentStrategy strategy) {
+        this.strategy = strategy;
+    }
+    
+    public void processPayment(int amount) {
+        strategy.pay(amount);
+    }
+}
+
+The Strategy Pattern allows you to change algorithms at runtime.
+
+Topic: C# LINQ Extensions
+Here is a C# LINQ and extension method example:
+
+public static class EnumerableExtensions {
+    public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T> source) {
+        return source.Where(item => item != null);
+    }
+}
+
+public class DataProcessor {
+    public List<User> GetActiveUsers(IEnumerable<User> users) {
+        return users
+            .WhereNotNull()
+            .Where(u => u.IsActive)
+            .OrderBy(u => u.LastName)
+            .ThenBy(u => u.FirstName)
+            .ToList();
+    }
+}
+
+LINQ provides a powerful way to query and transform data in C#.
+
+Topic: React Hooks
+Here is a React component with hooks:
+
+function UserProfile({ userId }) {
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    
+    useEffect(() => {
+        async function loadUser() {
+            try {
+                const data = await fetchUser(userId);
+                setUser(data);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
+        }
+        loadUser();
+    }, [userId]);
+    
+    if (loading) return <div>Loading...</div>;
+    return <div>{user.name}</div>;
+}
+
+React hooks let you use state and lifecycle features in functional components.
+
+Topic: Rust Traits
+Here is a Rust trait and implementation:
+
+trait Drawable {
+    fn draw(&self);
+}
+
+struct Circle {
+    radius: f64,
+}
+
+impl Drawable for Circle {
+    fn draw(&self) {
+        println!("Drawing circle with radius {}", self.radius);
+    }
+}
+
+fn render<T: Drawable>(shape: &T) {
+    shape.draw();
+}
+
+Rust traits define shared behavior similar to interfaces in other languages.
+
+Topic: Go Interfaces
+Here is a Go interface and struct example:
+
+type Logger interface {
+    Log(message string)
+    LogError(err error)
+}
+
+type FileLogger struct {
+    filepath string
+}
+
+func (f *FileLogger) Log(message string) {
+    log.Printf("[INFO] %s", message)
+}
+
+func (f *FileLogger) LogError(err error) {
+    log.Printf("[ERROR] %v", err)
+}
+
+Go interfaces are implemented implicitly, making code flexible and testable.
+
+Topic: Deep Learning Frameworks
+Question: What are PyTorch and TensorFlow?
+Answer: PyTorch and TensorFlow are popular deep learning frameworks for building and training neural networks. They are widely used in machine learning research and production.
+
+Topic: Transformer Architecture
+Question: What is a transformer?
+Answer: A transformer architecture uses self-attention, feedforward layers, and positional encoding. Language models are trained on large text corpora to learn patterns and generate text.
+
+Topic: Software Design Patterns
+The repository pattern separates data access logic from business logic. Dependency injection makes code more testable and maintainable. SOLID principles guide object-oriented design for better software architecture.
+
+Topic: Asynchronous Programming
+Async/await syntax makes asynchronous code easier to read and write. Promises and callbacks are used for handling asynchronous operations in JavaScript and other languages.
+
+Topic: APIs
+RESTful APIs use HTTP methods like GET, POST, PUT, and DELETE. GraphQL allows clients to request exactly the data they need, reducing over-fetching and under-fetching.
+
+Topic: Databases
+Database normalization reduces data redundancy and improves integrity. Indexing improves query performance in relational databases by creating efficient lookup structures.
+
+Topic: DevOps
+Version control with Git helps teams collaborate on code effectively. CI/CD pipelines automate testing and deployment processes, improving software quality and delivery speed.
+
+Topic: Dependency Injection
+Question: Why should we use dependency injection instead of creating objects directly?
+Answer: Dependency injection improves testability because we can mock dependencies. It reduces coupling between classes, making code more maintainable. It follows the Dependency Inversion Principle from SOLID. When requirements change, we only modify the injection configuration, not the class itself.
+
+Topic: Composition vs Inheritance
+Question: What is the difference between composition and inheritance?
+Answer: Composition means "has-a" relationship while inheritance means "is-a" relationship. Composition is more flexible because you can change behavior at runtime. Inheritance creates tight coupling between parent and child classes. The rule is favor composition over inheritance for better flexibility and maintainability.
+
+Topic: Async Benefits
+Question: Why use async/await instead of callbacks?
+Answer: Async/await makes asynchronous code look synchronous, improving readability. It avoids callback hell and makes error handling easier with try/catch. The code flow is more linear and easier to debug.
+
+Topic: Database Selection
+Question: When should you use a NoSQL database instead of SQL?
+Answer: Use NoSQL when you need horizontal scalability, flexible schema, or handle unstructured data. SQL is better when you need ACID transactions, complex joins, or strict data consistency. Consider your access patterns and scale requirements before choosing.
+
+Topic: Pure Functions
+Question: What makes a function pure in functional programming?
+Answer: A pure function always returns the same output for the same input. It has no side effects like modifying global state or I/O operations. Pure functions are easier to test, reason about, and parallelize.
+
+Topic: API Debugging
+Problem: Your API returns 500 errors intermittently.
+Solution: Check logs for error messages and stack traces. Identify if it's database connection timeout or memory issues. Monitor resource usage like CPU, memory, and connections. Add retry logic for transient failures. Implement circuit breaker pattern for failing dependencies. Use correlation IDs to trace requests across services.
+
+Topic: Query Optimization
+Problem: How to improve database query performance?
+Solution: Analyze slow query logs to identify bottlenecks. Add indexes on frequently queried columns. Use EXPLAIN to understand query execution plan. Avoid N+1 queries by using joins or eager loading. Implement caching for frequently accessed data. Consider denormalization for read-heavy workloads. Use connection pooling to reduce overhead.
+
+Topic: Architecture Decision
+Question: Should you use microservices or monolith?
+Answer: Monolith is simpler for small teams, easier to deploy, and has better performance for single-server deployment. Microservices provide independent scaling, technology flexibility, and fault isolation. Start with monolith, split into microservices when you have clear bounded contexts and team capacity.
+
+Topic: Mutable Default Arguments
+Problem: Why is this code problematic?
+
+def add_item(item, items=[]):
+    items.append(item)
+    return items
+
+Explanation: Default arguments are evaluated once at function definition, not each call. The list is shared across all calls, causing unexpected behavior.
+
+Solution:
+
+def add_item(item, items=None):
+    if items is None:
+        items = []
+    items.append(item)
+    return items
+
+Topic: Input Validation
+Question: Why validate input on both client and server?
+Answer: Client-side validation provides immediate feedback and better UX. However, it can be bypassed, so server-side validation is mandatory for security. Always validate, sanitize, and escape user input on the server. Defense in depth means validate everywhere, but trust nothing from the client.
+
+Topic: Performance Optimization
+Problem: Why is this loop slow?
+
+result = []
+for item in large_list:
+    if item not in result:
+        result.append(item)
+
+Explanation: The in operator on a list performs linear search O(n). Inside a loop of n items, this becomes O(n squared). Using a set provides O(1) lookup, reducing total complexity to O(n).
+
+Optimized Solution:
+
+result = list(set(large_list))
+
+Or preserve order:
+
+result = list(dict.fromkeys(large_list))
+
+Topic: Event-Driven Architecture
+Question: When to use event-driven architecture?
+Answer: Use events when you need loose coupling between services, async processing, or audit trails. Events enable eventual consistency and scalability. However, they add complexity in debugging and ordering guarantees. Best for systems with clear domain events.
+
+Topic: Sorting Algorithms
+Question: How to choose sorting algorithm?
+Analysis: Quick Sort has O(n log n) average time and is good for general purpose. Merge Sort has O(n log n) worst case, is stable, but needs extra space. Heap Sort has O(n log n) worst case and is in-place but not stable. Tim Sort is adaptive and best for partially sorted data. Counting Sort has O(n+k) for integers with limited range. Consider data size, memory constraints, and stability requirements.
+
+Topic: Exception Handling
+Question: Try/catch vs validation?
+Answer: Use validation for expected scenarios like user input. Use exceptions for unexpected errors like network failures. Exceptions have performance overhead, so do not use them for control flow. Validate early, fail fast, and provide meaningful error messages.
+
+Topic: Thread Safety
+Problem: Race condition in counter increment
+
+counter = 0
+def increment():
+    global counter
+    counter += 1
+
+Explanation: The += operation is not atomic. Multiple threads can read the same value before incrementing, causing lost updates.
+
+Solution with Lock:
+
+from threading import Lock
+
+counter = 0
+lock = Lock()
+
+def increment():
+    global counter
+    with lock:
+        counter += 1
+
+A lock ensures mutual exclusion, making the operation atomic.
+
+Topic: Factory vs Builder Pattern
+Question: When to use Factory vs Builder?
+Answer: Factory creates objects in one step, good for simple object creation with different types. Builder constructs complex objects step-by-step, good for objects with many optional parameters. Builder provides fluent interface and makes construction explicit. Choose based on object complexity.
+
+Topic: Memory Leaks
+Problem: Why does this JavaScript code leak memory?
+
+function createHandler() {
+    const bigArray = new Array(1000000);
+    return function() {
+        console.log(bigArray[0]);
+    }
+}
+
+Explanation: The returned function forms a closure that captures bigArray. Even if bigArray is not needed, it remains in memory. Solution is to only capture what you need or set references to null when done.
+
+Topic: HTTP Methods
+Question: Why use POST instead of GET for mutations?
+Answer: GET should be idempotent and safe with no side effects. POST indicates state change and prevents accidental mutations from browser prefetch or caching. PUT and DELETE are also idempotent for updates and deletions. Follow HTTP semantics for predictable API behavior.
+
+Topic: Code Smells
+Problem: God Object Antipattern
+Explanation: A class that knows too much or does too many things violates Single Responsibility Principle. It becomes hard to test, maintain, and understand.
+Solution: Break into smaller classes with focused responsibilities. Use composition to combine behaviors. Apply SOLID principles for better design.
+
+Topic: Testing Strategy
+Question: Unit vs Integration vs E2E tests?
+Answer: Unit tests are fast, isolated, and test individual functions. Integration tests verify components work together. E2E tests validate entire user flows but are slow and brittle. Use testing pyramid with many unit tests, some integration tests, and few E2E tests. Balance coverage with execution speed.
+
+Topic: Caching Strategy
+Question: When and where to cache?
+Analysis: Browser cache is for static assets and CDN. Application cache uses Redis or Memcached for database queries. Database cache stores query results. CDN cache distributes content geographically. Consider cache invalidation strategy, TTL, and consistency requirements. Cache invalidation is one of the hardest problems in computer science.
+
+Topic: Code Complexity
+Concept: Cyclomatic complexity measures number of independent paths through code. High complexity indicates code is hard to test and maintain. Reduce by extracting functions, using guard clauses, and simplifying conditionals. Aim for complexity under 10 per function.
+
+Topic: Refactoring vs Rewrite
+Question: When to refactor vs rewrite?
+Answer: Refactor when code is mostly good but needs improvement. Rewrite when cost of maintaining exceeds rebuild cost. Consider business continuity, team knowledge, and technical debt. Strangler pattern allows gradual replacement. Never do big-bang rewrites without incremental delivery.
