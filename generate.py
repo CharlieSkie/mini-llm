@@ -1,5 +1,6 @@
 import torch
 import re
+from difflib import SequenceMatcher
 from model import MiniGPT
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -11,7 +12,6 @@ stoi = checkpoint["stoi"]
 itos = checkpoint["itos"]
 vocab_size = checkpoint["vocab_size"]
 config = checkpoint["config"]
-NOT_IN_TRAIN_MESSAGE = "not in my train"
 
 def encode(s):
     return [stoi[c] for c in s if c in stoi]
@@ -21,8 +21,41 @@ def decode(tokens):
 
 def normalize_question(text: str) -> str:
     text = re.sub(r"^\s*question:\s*", "", text, flags=re.IGNORECASE)
+    text = re.sub(r"\b(\w+)[’']s\b", r"\1", text)
     text = re.sub(r"[^\w\s]", "", text.lower())
     return re.sub(r"\s+", " ", text).strip()
+
+def question_similarity(left: str, right: str) -> float:
+    left_words = set(left.split())
+    right_words = set(right.split())
+    if not left_words or not right_words:
+        return 0.0
+
+    overlap = len(left_words & right_words) / len(left_words | right_words)
+    sequence = SequenceMatcher(None, left, right).ratio()
+    return (sequence * 0.7) + (overlap * 0.3)
+
+def find_training_answer(prompt: str, training_answers: dict[str, str], min_score: float = 0.78) -> str | None:
+    normalized = normalize_question(prompt)
+    if not normalized:
+        return None
+
+    exact_answer = training_answers.get(normalized)
+    if exact_answer:
+        return exact_answer
+
+    best_question = ""
+    best_score = 0.0
+    for question in training_answers:
+        score = question_similarity(normalized, question)
+        if score > best_score:
+            best_question = question
+            best_score = score
+
+    if best_question and best_score >= min_score:
+        return training_answers[best_question]
+
+    return None
 
 def load_training_answers(filename: str) -> dict[str, str]:
     try:
@@ -77,16 +110,6 @@ def build_model_prompt(prompt: str) -> str:
 
     return f"Topic: {prompt}\n"
 
-def is_question_prompt(prompt: str) -> bool:
-    cleaned = prompt.strip()
-    lowered = cleaned.lower()
-    question_starters = ("what ", "why ", "how ", "when ", "where ", "who ", "which ")
-
-    if lowered.startswith("question:"):
-        return True
-
-    return cleaned.endswith("?") or lowered.startswith(question_starters)
-
 def clean_generated_text(full_output: str, full_prompt: str) -> str:
     if full_output.startswith(full_prompt):
         reply = full_output[len(full_prompt):].strip()
@@ -119,15 +142,10 @@ prompt = input("Enter prompt: ").strip()
 training_answers = load_training_answers("data/train.txt")
 
 if prompt:
-    training_answer = training_answers.get(normalize_question(prompt))
+    training_answer = find_training_answer(prompt, training_answers)
     if training_answer:
         print("\n=== GENERATED TEXT ===\n")
         print(training_answer)
-        raise SystemExit
-
-    if is_question_prompt(prompt):
-        print("\n=== GENERATED TEXT ===\n")
-        print(NOT_IN_TRAIN_MESSAGE)
         raise SystemExit
 
     full_prompt = build_model_prompt(prompt)

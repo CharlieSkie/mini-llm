@@ -3,6 +3,7 @@ import re
 import sys
 import time
 import torch
+from difflib import SequenceMatcher
 from model import MiniGPT
 
 # =========================
@@ -67,8 +68,41 @@ def clean_text(text: str) -> str:
 
 def normalize_question(text: str) -> str:
     text = re.sub(r"^\s*question:\s*", "", text, flags=re.IGNORECASE)
+    text = re.sub(r"\b(\w+)[’']s\b", r"\1", text)
     text = re.sub(r"[^\w\s]", "", text.lower())
     return re.sub(r"\s+", " ", text).strip()
+
+def question_similarity(left: str, right: str) -> float:
+    left_words = set(left.split())
+    right_words = set(right.split())
+    if not left_words or not right_words:
+        return 0.0
+
+    overlap = len(left_words & right_words) / len(left_words | right_words)
+    sequence = SequenceMatcher(None, left, right).ratio()
+    return (sequence * 0.7) + (overlap * 0.3)
+
+def find_training_answer(prompt: str, min_score: float = 0.78) -> str | None:
+    normalized = normalize_question(prompt)
+    if not normalized:
+        return None
+
+    exact_answer = training_answers.get(normalized)
+    if exact_answer:
+        return exact_answer
+
+    best_question = ""
+    best_score = 0.0
+    for question in training_answers:
+        score = question_similarity(normalized, question)
+        if score > best_score:
+            best_question = question
+            best_score = score
+
+    if best_question and best_score >= min_score:
+        return training_answers[best_question]
+
+    return None
 
 def load_training_answers(filename: str) -> dict[str, str]:
     if not os.path.exists(filename):
@@ -112,7 +146,6 @@ def load_training_answers(filename: str) -> dict[str, str]:
     return answers
 
 training_answers = load_training_answers("data/train.txt")
-NOT_IN_TRAIN_MESSAGE = "not in my train"
 
 def type_out(text: str, delay: float = TYPE_DELAY):
     """
@@ -152,29 +185,13 @@ def build_model_prompt(prompt: str) -> str:
 
     return f"Topic: {prompt}\n"
 
-def is_question_prompt(prompt: str) -> bool:
-    """
-    Detect normal user questions, including prompts already written in train.txt style.
-    """
-    cleaned = prompt.strip()
-    lowered = cleaned.lower()
-    question_starters = ("what ", "why ", "how ", "when ", "where ", "who ", "which ")
-
-    if lowered.startswith("question:"):
-        return True
-
-    return cleaned.endswith("?") or lowered.startswith(question_starters)
-
 def generate_response(prompt: str, history: str = "") -> str:
     """
     Generate text based on the prompt using a format similar to data/train.txt.
     """
-    training_answer = training_answers.get(normalize_question(prompt))
+    training_answer = find_training_answer(prompt)
     if training_answer:
         return clean_text(training_answer)
-
-    if is_question_prompt(prompt):
-        return NOT_IN_TRAIN_MESSAGE
 
     full_prompt = build_model_prompt(prompt)
 
