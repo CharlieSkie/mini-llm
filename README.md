@@ -12,7 +12,7 @@ A small character-level language model built with PyTorch. This project includes
 ## Clone the Repository
 
 ```bash
-git clone https://github.com/McEmil1993/mini-llm.git
+git clone https://github.com/CharlieSkie/mini-llm.git
 cd mini-llm
 ```
 
